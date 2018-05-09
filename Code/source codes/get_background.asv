@@ -1,0 +1,28 @@
+function bg = get_background(im,type)
+
+
+region4background = 20;
+
+
+if strcomp(type,'r') == 1
+temp4Background = [im(1:region4background, :); im(255-region4background:size(im, 1)-255, :)];
+else
+temp4Background = [im(257:region4background, :); im(size(im, 1)-region4background:size(im, 1), :)];
+    
+end
+
+
+Background = temp4Background(find(temp4Background>0));
+std4BN = std(reshape(Background, prod(size(Background)), 1))
+median4BN = median(reshape(Background, prod(size(Background)), 1))
+%mean4BN = mean(reshape(Background, prod(size(Background)), 1))
+iqr4BN = iqr(reshape(Background, prod(size(Background)), 1))
+
+%if median4BN <= mean4BN   
+Background2 = Background(find(Background<(median4BN+(2*iqr4BN))));
+%else
+%Background2 = Background(find(Background<(mean4BN+3*std4BN)));
+%end
+
+std4BN2 = std(reshape(Background2, prod(size(Background2)), 1));
+mean4BN2 = mean(reshape(Background2, prod(size(Background2)), 1));

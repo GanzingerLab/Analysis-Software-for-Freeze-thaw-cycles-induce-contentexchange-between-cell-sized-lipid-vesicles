@@ -1,0 +1,82 @@
+function excel_export_bacs3(folders2analyse,all_blue_ampli_collected,all_red_ampli_collected,all_yell_ampli_collected,save_name)
+    
+    
+    %[ratio4axis_sorted, index_sort] = sort(ratio4axis);
+    
+    columns = {'A'; 'B'; 'C'; 'D'; 'E'; 'F'; 'G'; 'H'; 'I'; 'J' ;'K' ;'L'; 'M'; 'N'; 'O'; 'P'; 'Q' ;'R'; 'S'; 'T'; 'U'; 'V'; 'W'; 'X'; 'Y' ;'Z'; 'AA'; 'AB'; 'AC';'AD'; 'AE' ;'AF';'AG';'AH' ;'AI' ;'AJ' ;'AK';'AL';'AM'; 'AN'; 'AO'; 'AP'; 'AQ' ;'AR'; 'AS'; 'AT'; 'AU'; 'AV'; 'AW'; 'AX'; 'AY' ;'AZ'; 'BA'; 'BB'; 'BC'; 'BD'; 'BE'; 'BF'; 'BG'; 'BH'; 'BI'; 'BJ' ;'BK' ;'BL'; 'BM'; 'BN'; 'BO'; 'BP'; 'BQ' ;'BR'; 'BS'; 'BT'; 'BU'; 'BV'; 'BW'; 'BX'; 'BY' ;'BZ'; 'CA'; 'CB'; 'CC'; 'CD'; 'CE'; 'CF'; 'CG'; 'CH'; 'CI'; 'CJ' ;'CK' ;'CL'; 'CM'; 'CN'; 'CO'; 'CP'; 'CQ' ;'CR'; 'CS'; 'CT'; 'CU'; 'CV'; 'CW'; 'CX'; 'CY' ;'CZ'; 'DA'; 'DB'; 'DC'; 'DD'; 'DE'; 'DF'; 'DG'; 'DH'; 'DI'; 'DJ' ;'DK' ;'DL'; 'DM'; 'DN'; 'DO'; 'DP'; 'DQ' ;'DR'; 'DS'; 'DT'; 'DU'; 'DV'; 'DW'; 'DX'; 'DY' ;'DZ'; 'EA'; 'EB'; 'EC'; 'ED'; 'EE'; 'EF'; 'EG'; 'EH'; 'EI'; 'EJ' ;'EK' ;'EL'; 'EM'; 'EN'; 'EO'; 'EP'; 'EQ' ;'ER'; 'ES'; 'ET'; 'EU'; 'EV'; 'EW'; 'EX'; 'EY' ;'EZ'};
+  
+    
+    
+    count = 1;
+    for n5=1:length(folders2analyse)
+        
+        col = columns{count};
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),folders2analyse(n5),'intensites_LnZ',strcat(col,'1:',col,'1'))
+        length_excelsheet = length(all_red_ampli_collected{n5});
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),{'red intensities'},'intensites_LnZ',strcat(col,'2:',col,'2'));
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),all_red_ampli_collected{n5},'intensites_LnZ',strcat(col,'3:',col,num2str(length_excelsheet)))
+        
+ 
+        col = columns{count+1};
+        length_excelsheet = length(all_blue_ampli_collected{n5});
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),{'green intensities'},'intensites_LnZ',strcat(col,'2:',col,'2'));
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),all_blue_ampli_collected{n5},'intensites_LnZ',strcat(col,'3:',col,num2str(length_excelsheet)))
+        
+        
+        col = columns{count+2};
+        length_excelsheet = length(lnZ_AND{n5});
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),{'LnZ'},'intensites_LnZ',strcat(col,'2:',col,'2'));
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),lnZ_AND{n5},'intensites_LnZ',strcat(col,'3:',col,num2str(length_excelsheet)))
+
+        
+        count = count + 3;
+    end
+    
+    %%2nd spread sheet for histogram data:
+    
+     count = 1;
+     col = columns{count};
+     bins = -5.9:0.2:5.9;
+     length_excelsheet = length(bins)+3;
+     xlswrite1(strcat(save_name,'results_all_datasets.xls'),{'bin centres'},'counts & rel freq for LnZ hist',strcat(col,'2:',col,'2'));
+     xlswrite1(strcat(save_name,'results_all_datasets.xls'),bins','counts & rel freq for LnZ hist',strcat(col,'3:',col,num2str(length_excelsheet-1)))
+        
+    
+     for n5=1:length(folders2analyse)
+        
+        count = count+1;
+        col = columns{count};
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),folders2analyse(n5),'counts & rel freq for LnZ hist',strcat(col,'1:',col,'1'))
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),{'counts'},'counts & rel freq for LnZ hist',strcat(col,'2:',col,'2'));
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),lnZ_hist_counts{n5}','counts & rel freq for LnZ hist',strcat(col,'3:',col,num2str(length_excelsheet-1)))
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),sum(lnZ_hist_counts{n5}),'counts & rel freq for LnZ hist',strcat(col,strcat(num2str(length_excelsheet),':'),col,num2str(length_excelsheet)))
+     
+    end 
+ 
+   
+    for n5=1:length(folders2analyse)
+        
+        count = count +1;
+        col = columns{count};
+        length_excelsheet = length(lnZ_hist_freq{n5})+2;
+      
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),folders2analyse(n5),'counts & rel freq for LnZ hist',strcat(col,'1:',col,'1'))
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),{'rel frequency'},'counts & rel freq for LnZ hist',strcat(col,'2:',col,'2'));
+        xlswrite1(strcat(save_name,'results_all_datasets.xls'),lnZ_hist_freq{n5}','counts & rel freq for LnZ hist',strcat(col,'3:',col,num2str(length_excelsheet)))
+    
+    end
+  
+
+
+    
+    
+    %statistics
+    fid = fopen(strcat(save_name,'_results_ttest.dat'),'a');
+    for n4=1:length(lnZ_AND)-1
+        
+        getstats_vs7(lnZ_AND{n4},lnZ_AND{n4+1},folders2analyse{n4},folders2analyse{n4+1},'OR',' integrated intensity',fid);
+   end
+    fclose(fid);
+    
+    
+end

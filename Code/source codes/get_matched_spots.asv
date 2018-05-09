@@ -1,0 +1,52 @@
+function [matched_points, coloc_spot_positions] = get_matched_spots(red_spots_41cell,blue_spots_41cell,number_of_spots41cell,d_lim,colour)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pre-allocating array size can lead to significant time savings. For this
+%% example, defining matched_frames = []; distances = []; is about 80%
+%% slower than the method shown below, despite the extra step at the end to
+%% truncate the array.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%indexing issue here - array must be
+%number_of_spots.blue*number_of_spots*red
+
+spot_red = number_of_spots41cell.red;   
+if strcmp(colour,'b')
+spot_blue = number_of_spots41cell.blue;
+else
+end
+coloc_spot_positions = [];
+
+if and(spot_red, spot_blue) == 1,
+
+    for m1 = 1:spot_blue,
+    
+    xy4_blue = blue_spots_41cell(m1,1:2);
+    
+        for m2 = 1:spot_red,
+        
+    xy4_red = red_spots_41cell(m2,1:2);
+    
+    dist = sqrt(sum((xy4_blue-xy4_red).^2));
+    
+             if d_lim>=dist,
+             coloc_spot_positions = [coloc_spot_positions; xy4_blue xy4_red];
+             end
+        end
+    end
+    
+
+    if ~isempty(coloc_spot_positions) 
+    matched_points = size(coloc_spot_positions,1);
+    else
+    matched_points = 0;
+    end
+
+else
+    
+    matched_points = 0;
+    
+end
+        
+   
+    
